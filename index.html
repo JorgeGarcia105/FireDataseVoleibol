@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votación de Nombres</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Votación de Nombres para el Equipo</h1>
+        <input type="text" id="newName" placeholder="Escribe un nombre...">
+        <button onclick="addName()">Agregar Nombre</button>
+        <h2>Lista de Nombres</h2>
+        <ul id="nameList"></ul>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
