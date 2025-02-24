@@ -22,16 +22,20 @@ const db = firebase.firestore();
 
 let voted = localStorage.getItem("voted") || false;
 
-function addName() {
+document.getElementById("addNameBtn").addEventListener("click", async () => {
     let newName = document.getElementById("newName").value.trim();
     if (newName) {
-        db.collection("nombres").doc(newName).set({ votos: 0 }, { merge: true })
-        .then(() => {
+        try {
+            await setDoc(doc(db, "nombres", newName), { votos: 0 }, { merge: true });
+            console.log("✅ Documento creado:", newName);
             document.getElementById("newName").value = "";
             renderNames();
-        });
+        } catch (error) {
+            console.error("❌ Error al guardar:", error);
+        }
     }
-}
+});
+
 
 function vote(name) {
     if (!voted) {
