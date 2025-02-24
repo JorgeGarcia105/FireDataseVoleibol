@@ -197,6 +197,11 @@ li button:hover {
         padding: 10px;
     }
 
+    .form {
+        flex-direction: column;
+        gap: 10px;
+    }
+
     button {
         padding: 10px 15px;
     }
