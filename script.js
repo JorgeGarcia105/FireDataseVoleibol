@@ -1,39 +1,49 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, doc, getDocs, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_AUTH_DOMAIN",
-    projectId: "TU_PROJECT_ID",
-    storageBucket: "TU_STORAGE_BUCKET",
-    messagingSenderId: "TU_MESSAGING_SENDER_ID",
-    appId: "TU_APP_ID"
+  apiKey: "AIzaSyBn6X6t3pKH8zwH_xCbfKcawGvCjq0gcUE",
+  authDomain: "empresasgarcia-49301.firebaseapp.com",
+  projectId: "empresasgarcia-49301",
+  storageBucket: "empresasgarcia-49301.firebasestorage.app",
+  messagingSenderId: "479782174196",
+  appId: "1:479782174196:web:989b36ebec3ae2d0a24da1",
+  measurementId: "G-Y9ZBCE6ZW4"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 let voted = localStorage.getItem("voted") || false;
 
-document.getElementById("addNameBtn").addEventListener("click", async () => {
+function addName() {
     let newName = document.getElementById("newName").value.trim();
     if (newName) {
-        await setDoc(doc(db, "nombres", newName), { votos: 0 }, { merge: true });
-        document.getElementById("newName").value = "";
-        renderNames();
+        db.collection("nombres").doc(newName).set({ votos: 0 }, { merge: true })
+        .then(() => {
+            document.getElementById("newName").value = "";
+            renderNames();
+        });
     }
-});
+}
 
-async function vote(name) {
+function vote(name) {
     if (!voted) {
-        const nameDoc = doc(db, "nombres", name);
-        const snapshot = await getDocs(collection(db, "nombres"));
-        snapshot.forEach(async (docSnap) => {
-            if (docSnap.id === name) {
-                let newVotes = docSnap.data().votos + 1;
-                await updateDoc(nameDoc, { votos: newVotes });
-                localStorage.setItem("voted", true);
-                voted = true;
-                renderNames();
+        let docRef = db.collection("nombres").doc(name);
+        docRef.get().then((doc) => {
+            if (doc.exists) {
+                let newVotes = doc.data().votos + 1;
+                docRef.update({ votos: newVotes }).then(() => {
+                    localStorage.setItem("voted", true);
+                    voted = true;
+                    renderNames();
+                });
             }
         });
     } else {
@@ -41,14 +51,15 @@ async function vote(name) {
     }
 }
 
-async function renderNames() {
+function renderNames() {
     let list = document.getElementById("nameList");
     list.innerHTML = "";
-    const snapshot = await getDocs(collection(db, "nombres"));
-    snapshot.forEach((docSnap) => {
-        let li = document.createElement("li");
-        li.innerHTML = `${docSnap.id} - ${docSnap.data().votos} votos <button onclick="vote('${docSnap.id}')">Votar</button>`;
-        list.appendChild(li);
+    db.collection("nombres").orderBy("votos", "desc").get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            let li = document.createElement("li");
+            li.innerHTML = `${doc.id} - ${doc.data().votos} votos <button onclick="vote('${doc.id}')">Votar</button>`;
+            list.appendChild(li);
+        });
     });
 }
 
