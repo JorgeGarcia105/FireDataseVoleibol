@@ -3,17 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Votación de Nombres</title>
+    <title>Votación Neon - Voleibol</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" type="module" defer></script>
 </head>
 <body>
     <div class="container">
-        <h1>Votación de Nombres para el Equipo</h1>
-        <input type="text" id="newName" placeholder="Escribe un nombre...">
-        <button id="addNameBtn">Agregar Nombre</button>
-        <h2>Lista de Nombres</h2>
+        <h1>🏐 Votación de Voleibol 🏐</h1>
+
+        <!-- Animación de balones -->
+        <div class="volleyballs">
+            <img src="volleyball.png" class="ball" alt="Balón de voleibol">
+            <img src="volleyball.png" class="ball" alt="Balón de voleibol">
+            <img src="volleyball.png" class="ball" alt="Balón de voleibol">
+        </div>
+
+        <!-- Formulario para agregar nombres -->
+        <div class="form">
+            <input type="text" id="newName" placeholder="Ingresa un nombre">
+            <button id="addNameBtn">Agregar Nombre</button>
+        </div>
+
+        <!-- Mensaje de horario -->
+        <p id="statusMessage">⏳ Verificando horario...</p>
+
+        <!-- Lista de nombres y votos -->
         <ul id="nameList"></ul>
     </div>
+
+    <script type="module" src="script.js"></script>
 </body>
 </html>
